@@ -57,12 +57,14 @@ main(int argc, char **argv)
 {
     int i;
     char *debugArg = "";
+    int debugFlag = -1;
 
     // before anything else, initialize the debugging system
     for (i = 1; i < argc; i++) {
         if (strcmp(argv[i], "-d") == 0) {
 	    ASSERT(i + 1 < argc);   // next argument is debug string
             debugArg = argv[i + 1];
+            debugFlag = debugArg[0] - '0';
 	    i++;
 	} else if (strcmp(argv[i], "-u") == 0) {
             cout << "Partial usage: nachos [-z -d debugFlags]\n";
@@ -74,6 +76,15 @@ main(int argc, char **argv)
     debug = new Debug(debugArg);
     
     DEBUG(dbgThread, "Entering main");
+
+    string ID = "B11115023";
+    int IDend = 23;
+    int tag = IDend % 26 % 10;
+
+    if(debugFlag == tag){
+        cout << "[DEBUG]" << ID << endl;
+    } 
+
 
     kernel = new KernelType(argc, argv);
     kernel->Initialize();

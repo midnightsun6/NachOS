@@ -114,21 +114,21 @@ Close:
 	j	$31
 	.end Close
 
-        .globl ThreadFork
-        .ent    ThreadFork
+	.globl ThreadFork
+	.ent    ThreadFork
 ThreadFork:
-        addiu $2,$0,SC_ThreadFork
-        syscall
-        j       $31
-        .end ThreadFork
+	addiu $2,$0,SC_ThreadFork
+	syscall
+	j       $31
+	.end ThreadFork
 
-        .globl ThreadYield
-        .ent    ThreadYield
+	.globl ThreadYield
+	.ent    ThreadYield
 ThreadYield:
-        addiu $2,$0,SC_ThreadYield
-        syscall
-        j       $31
-        .end ThreadYield
+	addiu $2,$0,SC_ThreadYield
+	syscall
+	j       $31
+	.end ThreadYield
 
 	.globl  PrintInt
 	.ent    PrintInt
@@ -138,10 +138,65 @@ PrintInt:
 	j       $31
 	.end    PrintInt
 
-/* dummy function to keep gcc happy */
-        .globl  __main
-        .ent    __main
+	.globl  Sleep
+	.ent    Sleep
+Sleep:
+	addiu $2,$0,SC_Sleep
+	syscall
+	j       $31
+	.end    Sleep
+
+	.globl  Add
+	.ent    Add
+Add:
+	addiu $2,$0,SC_Add
+	syscall
+	j       $31
+	.end    Add
+
+	.globl  Sub
+	.ent    Sub
+Sub:
+	addiu $2,$0,SC_Sub
+	syscall
+	j       $31
+	.end    Sub
+
+	.globl  Mul
+	.ent    Mul
+Mul:
+	addiu $2,$0,SC_Mul
+	syscall
+	j       $31
+	.end    Mul
+
+	.globl  Div
+	.ent    Div
+Div:
+	addiu $2,$0,SC_Div
+	syscall
+	j       $31
+	.end    Div
+
+	.globl  Mod
+	.ent    Mod
+Mod:
+	addiu $2,$0,SC_Mod
+	syscall
+	j       $31
+	.end    Mod
+
+	.globl  Print
+	.ent    Print
+Print:
+	addiu $2,$0,SC_Print
+	syscall
+	j       $31
+	.end    Print
+
+	.globl  __main
+	.ent    __main
 __main:
-        j       $31
-        .end    __main
+	j       $31
+	.end    __main
 

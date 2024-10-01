@@ -53,6 +53,10 @@ ExceptionHandler(ExceptionType which)
 {
 	int	type = kernel->machine->ReadRegister(2);
 	int	val;
+	int op1, op2, result;
+	int strAddr;
+	char ch;
+	int len = 0;
 
     switch (which) {
 	case SyscallException:
@@ -79,6 +83,74 @@ ExceptionHandler(ExceptionType which)
 			cout << "return value:" << val << endl;
 			kernel->currentThread->Finish();
 			break;
+		case SC_Sleep:
+			val=kernel->machine->ReadRegister(4);
+			cout << "Sleep Time:" << val << "(ms)" << endl;
+			kernel->alarm->WaitUntil(val);
+			return;
+		case SC_Add:
+			op1 = kernel->machine->ReadRegister(4);
+			op2 = kernel->machine->ReadRegister(5);
+			result = op1 + op2;
+			kernel->machine->WriteRegister(2, result);
+			return;
+		case SC_Sub:
+			op1 = kernel->machine->ReadRegister(4);
+			op2 = kernel->machine->ReadRegister(5);
+			result = op1 - op2;
+			kernel->machine->WriteRegister(2, result);
+			return;
+		case SC_Mul:
+			op1 = kernel->machine->ReadRegister(4);
+			op2 = kernel->machine->ReadRegister(5);
+			result = op1 * op2;
+			kernel->machine->WriteRegister(2, result);
+			return;
+		case SC_Div:
+			op1 = kernel->machine->ReadRegister(4);
+			op2 = kernel->machine->ReadRegister(5);
+			if(op2 != 0){
+				result = op1 / op2;
+				kernel->machine->WriteRegister(2, result);
+			} else {
+				cout<<"Error: Divide by zero" << endl;
+				kernel->machine->WriteRegister(2, 11115023);
+			}
+			return;
+		case SC_Mod:
+			op1 = kernel->machine->ReadRegister(4);
+			op2 = kernel->machine->ReadRegister(5);
+			if(op2 != 0){
+				result = op1 % op2;
+				kernel->machine->WriteRegister(2, result);
+			} else {
+				cout<<"Error: Mod by zero" << endl;
+				kernel->machine->WriteRegister(2, 11115023);
+			}
+			return;
+
+		case SC_Print:
+			strAddr = kernel->machine->ReadRegister(4);
+			ch;
+			len = 0;
+			do{
+				kernel->machine->ReadMem(strAddr, 1, &val);
+				ch =char(val);
+				if(ch == '\0'){
+					break;
+				}
+				if(ch == (23 % 26) + 'a' || ch == (23 % 26) + 'A'){
+					cout << "*";
+				} else {
+					cout << ch;
+				}
+				len++;
+				strAddr++;
+			}while(true);
+			//cout << endl;
+			kernel->machine->WriteRegister(2, len);
+			return;
+
 		default:
 		    cerr << "Unexpected system call " << type << "\n";
  		    break;
